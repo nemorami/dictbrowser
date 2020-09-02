@@ -25,7 +25,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #endif()
 
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets WebEngineWidgets REQUIRED)
 
 if(ANDROID)
   add_library(dictbrowser SHARED
@@ -33,6 +33,9 @@ if(ANDROID)
     mainwindow.cpp
     mainwindow.h
     mainwindow.ui
+    editdict.cpp
+    editdict.h
+    editdict.ui
   )
 else()
   add_executable(dictbrowser
@@ -40,7 +43,10 @@ else()
     mainwindow.cpp
     mainwindow.h
     mainwindow.ui
+    editdict.cpp
+    editdict.h
+    editdict.ui
   )
 endif()
 
-target_link_libraries(dictbrowser PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(dictbrowser  PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt5::WebEngineWidgets)
