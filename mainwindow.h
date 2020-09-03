@@ -6,6 +6,8 @@
 #include <QSettings>
 #include <iostream>
 
+#include "editdict.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -29,6 +31,7 @@ private:
     QLineEdit searchedit;
     QHash<QString, QString> dictList;
     QTabWidget *mainTab;
+    EditDict *edit_dict;
 
 };
 #endif // MAINWINDOW_H

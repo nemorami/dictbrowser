@@ -3,6 +3,7 @@
 #include "mainwindow.h"
 
 #include <QtWebEngineWidgets/QWebEngineView>
+#include <QMessageBox>
 
 
 
@@ -16,8 +17,8 @@ MainWindow::MainWindow(QWidget *parent)
     mainTab = new QTabWidget(this);
     connect(mainTab, &QTabWidget::currentChanged, this, &MainWindow::on_actionsearch_triggered);
     connect(&searchedit, &QLineEdit::returnPressed, this, &MainWindow::on_actionsearch_triggered);
-
     setCentralWidget(mainTab);
+    edit_dict = new EditDict();
     readInitFile();
 
 
@@ -33,8 +34,20 @@ MainWindow::~MainWindow()
 void MainWindow::readInitFile()
 {
     QSettings settings(QSettings::IniFormat, QSettings::UserScope, "nemorami", "dictbrowser");
+
     settings.beginGroup("DICTIONARY");
-    for (auto key : settings.allKeys()) {
+    QStringList keys = settings.allKeys();
+    if (keys.empty()) {
+         settings.setValue("oxford", "https://www.oxfordlearnersdictionaries.com/definition/english/QUERY");
+         settings.setValue("cambridge", "https://dictionary.cambridge.org/dictionary/english/QUERY");
+         settings.setValue("collins", "https://www.collinsdictionary.com/dictionary/english/QUERY");
+         settings.setValue("daum", "https://dic.daum.net/search.do?q=QUERY");
+         settings.setValue("longman", "https://www.ldoceonline.com/dictionary/QUERY");
+         settings.setValue("merriam", "https://www.merriam-webster.com/dictionary/QUERY");
+         settings.setValue("naver", "https://en.dict.naver.com/#/search?query=QUERY");
+    }
+
+    for (auto key : keys) {
         setDictList(key, settings.value(key).toString());
 
     }
@@ -72,6 +85,6 @@ void MainWindow::on_actionsearch_triggered()
 
 void MainWindow::on_actionedit_dict_triggered()
 {
-
+    edit_dict->show();
 }
 
