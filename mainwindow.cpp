@@ -21,8 +21,6 @@ MainWindow::MainWindow(QWidget *parent)
     edit_dict = new EditDict();
     readInitFile();
 
-
-
 }
 
 MainWindow::~MainWindow()

@@ -5,6 +5,7 @@
 #include "editdict.h"
 #include "ui_editdict.h"
 #include <QPushButton>
+#include <QDebug>
 
 EditDict::EditDict(QWidget *parent) :
     QDialog(parent),
@@ -34,6 +35,8 @@ EditDict::EditDict(QWidget *parent) :
 
     ui->tableView->setModel(model);
     ui->tableView->resizeColumnsToContents();
+    //세로 헤더를 드래그해서 옮길수 있게 함
+    ui->tableView->verticalHeader()->setSectionsMovable(true);
 
 
 
@@ -49,12 +52,13 @@ void EditDict::on_buttonBox_clicked(QAbstractButton *button)
 
     switch (ui->buttonBox->standardButton(button)) {
     case QDialogButtonBox::Save: {
-        QSettings settings(QSettings::IniFormat, QSettings::UserScope, "nemorami", "dictbrowseqt crystal/googler");
+        QSettings settings(QSettings::IniFormat, QSettings::UserScope, "nemorami", "dictbrowser");
         settings.remove("DICTIONARY");
         settings.beginGroup("DICTIONARY");
         QAbstractItemModel *model = ui->tableView->model();
         for (int i = 0; i < model->rowCount(); ++i) {
             settings.setValue(model->data(model->index(i,0)).toString(), model->data(model->index(i,1)).toString());
+            qDebug() << model->data(model->index(i,0)).toString();
         }
         settings.endGroup();
         break;
