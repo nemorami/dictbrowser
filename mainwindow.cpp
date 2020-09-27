@@ -18,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(mainTab, &QTabWidget::currentChanged, this, &MainWindow::on_actionsearch_triggered);
     connect(&searchedit, &QLineEdit::returnPressed, this, &MainWindow::on_actionsearch_triggered);
     setCentralWidget(mainTab);
-    readInitFile();
+    readDataFile();
     edit_dict = new EditDict();
 
 }
@@ -29,21 +29,24 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::readInitFile()
+void MainWindow::readDataFile()
 {
     //database connection
     db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)+"/dictionary");
-    bool ok = db.open();
-    qDebug() << ok;
+    db.open();
+
     QSqlQuery query;
+    //sqlite_master
     query.prepare("select count(*) from sqlite_master where name = 'dictionary'");
     query.exec();
     if(query.next()) {
-        // dictionary 테이블이 없으면 생성한다.
+        // dictionary 테이블이 없으면
         if(query.value(0).toInt() == 0) {
+            //테이블을 생성
             query.prepare("create table dictionary(name text, url text)");
             query.exec();
+            //초기데이터 적제
             query.prepare("insert into dictionary (name, url) values \
                    (\"oxford\", \"https://www.oxfordlearnersdictionaries.com/definition/english/QUERY\"), \
                    (\"cambridge\", \"https://dictionary.cambridge.org/dictionary/english/QUERY\"), \

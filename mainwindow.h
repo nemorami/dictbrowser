@@ -20,7 +20,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    void readInitFile();
+    void readDataFile();
 
     void setDictList(QString key, QString value);
 private slots:
