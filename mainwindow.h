@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QLineEdit>
 #include <QSettings>
+#include <QtSql/QSqlDatabase>
 #include <iostream>
 
 #include "editdict.h"
@@ -20,7 +21,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     void readInitFile();
-    void saveInitFile();
+
     void setDictList(QString key, QString value);
 private slots:
     void on_actionsearch_triggered();
@@ -32,6 +33,7 @@ private:
     QHash<QString, QString> dictList;
     QTabWidget *mainTab;
     EditDict *edit_dict;
+    QSqlDatabase db;
 
 };
 #endif // MAINWINDOW_H

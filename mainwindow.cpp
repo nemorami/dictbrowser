@@ -4,8 +4,8 @@
 
 #include <QtWebEngineWidgets/QWebEngineView>
 #include <QMessageBox>
-
-
+#include <QtCore/QStandardPaths>
+#include <QtSql/QSqlQuery>
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -18,8 +18,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(mainTab, &QTabWidget::currentChanged, this, &MainWindow::on_actionsearch_triggered);
     connect(&searchedit, &QLineEdit::returnPressed, this, &MainWindow::on_actionsearch_triggered);
     setCentralWidget(mainTab);
-    edit_dict = new EditDict();
     readInitFile();
+    edit_dict = new EditDict();
 
 }
 
@@ -31,33 +31,40 @@ MainWindow::~MainWindow()
 
 void MainWindow::readInitFile()
 {
-    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "nemorami", "dictbrowser");
-
-    settings.beginGroup("DICTIONARY");
-    QStringList keys = settings.allKeys();
-    if (keys.empty()) {
-         settings.setValue("oxford", "https://www.oxfordlearnersdictionaries.com/definition/english/QUERY");
-         settings.setValue("cambridge", "https://dictionary.cambridge.org/dictionary/english/QUERY");
-         settings.setValue("collins", "https://www.collinsdictionary.com/dictionary/english/QUERY");
-         settings.setValue("daum", "https://dic.daum.net/search.do?q=QUERY");
-         settings.setValue("longman", "https://www.ldoceonline.com/dictionary/QUERY");
-         settings.setValue("merriam", "https://www.merriam-webster.com/dictionary/QUERY");
-         settings.setValue("naver", "https://en.dict.naver.com/#/search?query=QUERY");
+    //database connection
+    db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)+"/dictionary");
+    bool ok = db.open();
+    qDebug() << ok;
+    QSqlQuery query;
+    query.prepare("select count(*) from sqlite_master where name = 'dictionary'");
+    query.exec();
+    if(query.next()) {
+        // dictionary 테이블이 없으면 생성한다.
+        if(query.value(0).toInt() == 0) {
+            query.prepare("create table dictionary(name text, url text)");
+            query.exec();
+            query.prepare("insert into dictionary (name, url) values \
+                   (\"oxford\", \"https://www.oxfordlearnersdictionaries.com/definition/english/QUERY\"), \
+                   (\"cambridge\", \"https://dictionary.cambridge.org/dictionary/english/QUERY\"), \
+                   (\"collins\", \"https://www.collinsdictionary.com/dictionary/english/QUERY\"), \
+                   (\"daum\", \"https://dic.daum.net/search.do?q=QUERY\"), \
+                   (\"longman\", \"https://www.ldoceonline.com/dictionary/QUERY\"), \
+                   (\"merriam\", \"https://www.merriam-webster.com/dictionary/QUERY\"), \
+                   (\"naver\", \"https://en.dict.naver.com/#/search?query=QUERY\")");
+            query.exec();
+        }
+    } else {
+            qDebug() << "somethin wrong";
     }
+    query.prepare("select name, url from dictionary");
+    query.exec();
 
-    for (auto key : keys) {
-        setDictList(key, settings.value(key).toString());
-
+    while(query.next()){
+        setDictList(query.value(0).toString(), query.value(1).toString());
     }
-    settings.endGroup();
-
 }
 
-void MainWindow::saveInitFile()
-{
-    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "nemorami", "dictbrowser");
-    settings.setValue("DICTIONARY/oxford", "https://www.oxfordlearnersdictionaries.com/definition/english/QUERY");
-}
 
 void MainWindow::setDictList(QString key, QString value)
 {
@@ -72,12 +79,12 @@ void MainWindow::on_actionsearch_triggered()
     QString search = searchedit.text();
     if (!search.isEmpty()) {
         int index = mainTab->currentIndex();
-        QWebEngineView *widget = qobject_cast<QWebEngineView *>(mainTab->currentWidget());
+
         QString url = dictList[mainTab->tabText(index)];
 
         url.replace("QUERY", search);
         qDebug() << "search: " << search << Qt::endl <<  "url:" << url << Qt::endl;
-        widget->load(QUrl(url));
+        qobject_cast<QWebEngineView *>(mainTab->currentWidget())->load(QUrl(url));
     }
 }
 

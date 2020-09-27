@@ -3,7 +3,7 @@
 
 #include <QAbstractButton>
 #include <QDialog>
-
+#include <QtSql/QSqlTableModel>
 namespace Ui {
 class EditDict;
 }
@@ -21,6 +21,7 @@ private slots:
 
 private:
     Ui::EditDict *ui;
+    QSqlTableModel model;
 };
 
 #endif // EDITDICT_H
