@@ -35,12 +35,11 @@ void MainWindow::readDataFile()
     //database connection
     db = QSqlDatabase::addDatabase("QSQLITE");
     QString data_dir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-
+    // 데이터 디렉토리가 없으면  생성
     if (!QDir(data_dir).exists())
         QDir().mkdir(data_dir);
 
     db.setDatabaseName(data_dir+"/dictionary");
-
     db.open();
 
     QSqlQuery query;
@@ -65,7 +64,7 @@ void MainWindow::readDataFile()
             query.exec();
         }
     } else {
-            qDebug() << "somethin wrong";
+            qDebug() << "something wrong";
     }
     query.prepare("select name, url from dictionary");
     query.exec();
