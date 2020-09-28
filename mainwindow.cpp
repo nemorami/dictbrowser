@@ -6,6 +6,7 @@
 #include <QMessageBox>
 #include <QtCore/QStandardPaths>
 #include <QtSql/QSqlQuery>
+#include <QDir>
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -33,7 +34,13 @@ void MainWindow::readDataFile()
 {
     //database connection
     db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)+"/dictionary");
+    QString data_dir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+
+    if (!QDir(data_dir).exists())
+        QDir().mkdir(data_dir);
+
+    db.setDatabaseName(data_dir+"/dictionary");
+
     db.open();
 
     QSqlQuery query;
