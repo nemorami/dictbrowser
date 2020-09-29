@@ -76,10 +76,9 @@ void EditDict::on_buttonBox_clicked(QAbstractButton *button)
     case QDialogButtonBox::Discard: {
 
         for (auto row : ui->tableView->selectionModel()->selectedRows()) {
-            qDebug() << row.row();
-            ui->tableView->model()->removeRow(row.row());
+            model.removeRow(row.row());
         }
-        ui->tableView->model()->submit();
+        model.submit();
         break;
     }
     case QDialogButtonBox::Close:
