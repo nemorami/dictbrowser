@@ -21,11 +21,15 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     void readDataFile();
+    void readInitFile();
 
     void setDictList(QString key, QString value);
 private slots:
     void on_actionsearch_triggered();
     void on_actionedit_dict_triggered();
+
+protected:
+    void closeEvent(QCloseEvent *event) override;
 
 private:
     Ui::MainWindow *ui;

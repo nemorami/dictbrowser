@@ -22,6 +22,7 @@ private slots:
 private:
     Ui::EditDict *ui;
     QSqlTableModel model;
+    bool orderChanged;
 };
 
 #endif // EDITDICT_H

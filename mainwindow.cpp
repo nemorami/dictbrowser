@@ -19,7 +19,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(mainTab, &QTabWidget::currentChanged, this, &MainWindow::on_actionsearch_triggered);
     connect(&searchedit, &QLineEdit::returnPressed, this, &MainWindow::on_actionsearch_triggered);
     setCentralWidget(mainTab);
+    readInitFile();
     readDataFile();
+
     edit_dict = new EditDict();
 
 }
@@ -39,7 +41,7 @@ void MainWindow::readDataFile()
     if (!QDir(data_dir).exists())
         QDir().mkdir(data_dir);
 
-    db.setDatabaseName(data_dir+"/dictionary");
+    db.setDatabaseName(data_dir + "/dictionary");
     db.open();
 
     QSqlQuery query;
@@ -102,3 +104,15 @@ void MainWindow::on_actionedit_dict_triggered()
     edit_dict->show();
 }
 
+void MainWindow::readInitFile() {
+    QSettings settings("nemorami", "dictbrowser");
+    restoreGeometry(settings.value("geometry").toByteArray());
+    restoreState(settings.value("windowState").toByteArray());
+}
+
+void MainWindow::closeEvent(QCloseEvent *event) {
+    QSettings settings("nemorami", "dictbrowser");
+    settings.setValue("geometry", saveGeometry());
+    settings.setValue("windowState", saveState());
+    QWidget::closeEvent(event);
+}

@@ -6,7 +6,8 @@
 #include "ui_editdict.h"
 #include <QPushButton>
 #include <QDebug>
-
+#include <QSqlRecord>
+#include <QtSql/QSqlQuery>
 
 EditDict::EditDict(QWidget *parent) :
     QDialog(parent),
@@ -22,6 +23,9 @@ EditDict::EditDict(QWidget *parent) :
     ui->buttonBox->button(QDialogButtonBox::Discard)->setText("&Delete");
     ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tableView, &QTableView::customContextMenuRequested, this, &EditDict::customMenuRequested);
+    // row순서가 변경되면 orderChanged를 true로 설정
+    orderChanged = false;
+    connect(ui->tableView->verticalHeader(), &QHeaderView::sectionMoved, [=](){orderChanged = true;});
 //    model.setHeaderData(0, Qt::Horizontal, "이름");
 //    model.setHeaderData(1, Qt::Horizontal, "URL");
 
@@ -56,21 +60,30 @@ void EditDict::on_buttonBox_clicked(QAbstractButton *button)
 
     switch (ui->buttonBox->standardButton(button)) {
     case QDialogButtonBox::Save: {
-//        QSettings settings(QSettings::IniFormat, QSettings::UserScope, "nemorami", "dictbrowser");
-//        settings.remove("DICTIONARY");
-//        settings.beginGroup("DICTIONARY");
-//        QAbstractItemModel *model = ui->tableView->model();
-//        for (int i = 0; i < model->rowCount(); ++i) {
-//            settings.setValue(model->data(model->index(i,0)).toString(), model->data(model->index(i,1)).toString());
-//            qDebug() << model->data(model->index(i,0)).toString();
-//        }
-//        settings.endGroup();
-        model.submitAll();
+        // 순서가 변경되었으면 테이블 내용을 지우고 다시 삽입
+        if (orderChanged) {
+            QSqlQuery query;
+            query.exec("BEGIN");
+            query.exec("delete from dictionary");
+
+            for (int i = 0; i < model.rowCount(); ++i) {
+                auto record = model.record(ui->tableView->verticalHeader()->logicalIndex(i));
+                qDebug() << record.value(0) << "  " << record.value(1);
+                query.prepare("insert into dictionary(name, url) values (:name, :url)");
+                query.bindValue(":name", record.value(0));
+                query.bindValue(":url", record.value(1));
+                query.exec();
+            }
+            query.exec("END");
+            model.select();
+            orderChanged = false;
+        }
+
         break;
     }
     case QDialogButtonBox::Apply:
-        ui->tableView->model()->insertRow(ui->tableView->model()->rowCount());
-        ui->tableView->model()->submit();
+        model.insertRow(ui->tableView->model()->rowCount());
+        model.submit();
         break;
 
     case QDialogButtonBox::Discard: {
