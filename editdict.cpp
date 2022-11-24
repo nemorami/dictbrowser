@@ -63,7 +63,7 @@ void EditDict::on_buttonBox_clicked(QAbstractButton *button)
         // 순서가 변경되었으면 테이블 내용을 지우고 다시 삽입
         if (orderChanged) {
             QSqlQuery query;
-            query.exec("BEGIN");
+            QSqlDatabase::database().transaction();
             query.exec("delete from dictionary");
 
             for (int i = 0; i < model.rowCount(); ++i) {
@@ -74,7 +74,7 @@ void EditDict::on_buttonBox_clicked(QAbstractButton *button)
                 query.bindValue(":url", record.value(1));
                 query.exec();
             }
-            query.exec("END");
+            QSqlDatabase::database().commit();
             model.select();
             orderChanged = false;
         }

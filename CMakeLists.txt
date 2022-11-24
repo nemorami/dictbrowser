@@ -36,6 +36,8 @@ if(ANDROID)
     editdict.cpp
     editdict.h
     editdict.ui
+    webpage.cpp
+    webpage.h
   )
 else()
   add_executable(dictbrowser
@@ -45,6 +47,8 @@ else()
     mainwindow.ui
     editdict.cpp
     editdict.h
+    webpage.cpp
+    webpage.h
     editdict.ui
   )
 endif()
