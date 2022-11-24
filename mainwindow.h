@@ -25,7 +25,8 @@ public:
     void readInitFile();
 
     void setDictList(QString key, QString value);
-private slots:
+public slots:
+    void on_actionBack_triggered();
     void on_actionsearch_triggered();
     void on_actionedit_dict_triggered();
 

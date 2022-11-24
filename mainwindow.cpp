@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include "mainwindow.h"
-ff#include "webpage.h"
 
 #include <QtWebEngineWidgets/QWebEngineView>
 #include <QMessageBox>
@@ -107,6 +106,9 @@ void MainWindow::on_actionsearch_triggered()
     }
 }
 
+void MainWindow::on_actionBack_triggered() {
+    dynamic_cast<QWebEngineView *>(mainTab->currentWidget())->back();
+}
 
 void MainWindow::on_actionedit_dict_triggered()
 {
