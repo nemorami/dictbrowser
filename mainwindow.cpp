@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include "mainwindow.h"
-
+#include "webpage.h"
 #include <QtWebEngineWidgets/QWebEngineView>
 #include <QMessageBox>
 #include <QtCore/QStandardPaths>

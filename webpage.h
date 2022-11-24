@@ -8,10 +8,10 @@ class WebPage : public QWebEnginePage
     Q_OBJECT
 
     public:
-        explicit WebPage(QWidget *parent = 0);
+        explicit WebPage(QObject *parent = 0);
 
     protected:
-        bool certificateError(const QWebEngineCertificateError &error) override;
+        bool certificateError(const QWebEngineCertificateError &error);
 
 };
 
