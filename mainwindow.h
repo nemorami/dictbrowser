@@ -6,6 +6,7 @@
 #include <QSettings>
 #include <QtSql/QSqlDatabase>
 #include <iostream>
+#include <QCompleter>
 
 #include "editdict.h"
 
@@ -34,6 +35,8 @@ protected:
 private:
     Ui::MainWindow *ui;
     QLineEdit searchedit;
+    QStringList wordList;
+    QCompleter *completer;
     QHash<QString, QString> dictList;
     QTabWidget *mainTab;
     EditDict *edit_dict;

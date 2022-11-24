@@ -8,7 +8,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # QtCreator supports the following variables for Android, which are identical to qmake Android variables.
@@ -36,6 +36,8 @@ if(ANDROID)
     editdict.cpp
     editdict.h
     editdict.ui
+    webpage.cpp
+    webpage.h
   )
 else()
   add_executable(dictbrowser
@@ -45,8 +47,10 @@ else()
     mainwindow.ui
     editdict.cpp
     editdict.h
+    webpage.cpp
+    webpage.h
     editdict.ui
   )
 endif()
 
-target_link_libraries(dictbrowser  PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt5::WebEngineWidgets Qt5::Sql)
+target_link_libraries(dictbrowser  PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt6::WebEngineWidgets Qt6::Sql)

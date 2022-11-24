@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include "mainwindow.h"
+ff#include "webpage.h"
 
 #include <QtWebEngineWidgets/QWebEngineView>
 #include <QMessageBox>
@@ -18,6 +19,12 @@ MainWindow::MainWindow(QWidget *parent)
     mainTab = new QTabWidget(this);
     connect(mainTab, &QTabWidget::currentChanged, this, &MainWindow::on_actionsearch_triggered);
     connect(&searchedit, &QLineEdit::returnPressed, this, &MainWindow::on_actionsearch_triggered);
+
+    //LineEdit 아래 completer
+    completer = new QCompleter(wordList, this);
+    searchedit.setCompleter(completer);
+
+
     setCentralWidget(mainTab);
     readInitFile();
     readDataFile();
@@ -60,7 +67,7 @@ void MainWindow::readDataFile()
                    (\"cambridge\", \"https://dictionary.cambridge.org/dictionary/english/QUERY\"), \
                    (\"collins\", \"https://www.collinsdictionary.com/dictionary/english/QUERY\"), \
                    (\"daum\", \"https://dic.daum.net/search.do?q=QUERY\"), \
-                   (\"longman\", \"https://www.ldoceonline.com/dictionary/QUERY\"), \
+                   (\"longman\", \"https://www.ldoceonline.com/search/english/direct/?q=QUERY\"), \
                    (\"merriam\", \"https://www.merriam-webster.com/dictionary/QUERY\"), \
                    (\"naver\", \"https://en.dict.naver.com/#/search?query=QUERY\")");
             query.exec();
@@ -81,7 +88,7 @@ void MainWindow::setDictList(QString key, QString value)
 {
     dictList[key] = value;
     QWebEngineView *view = new QWebEngineView(this);
-
+    view->setPage(new WebPage());
     mainTab->addTab(view, key);
 }
 
@@ -95,9 +102,11 @@ void MainWindow::on_actionsearch_triggered()
 
         url.replace("QUERY", search);
         qDebug() << "search: " << search << Qt::endl <<  "url:" << url << Qt::endl;
-        qobject_cast<QWebEngineView *>(mainTab->currentWidget())->load(QUrl(url));
+        qobject_cast<QWebEngineView *>(mainTab->currentWidget())->setUrl(QUrl(url));
+        //view->setPage(new WebPage());
     }
 }
+
 
 void MainWindow::on_actionedit_dict_triggered()
 {
