@@ -127,3 +127,8 @@ void MainWindow::closeEvent(QCloseEvent *event) {
     settings.setValue("windowState", saveState());
     QWidget::closeEvent(event);
 }
+
+void MainWindow::on_actionForward_griggered() {
+    dynamic_cast<QWebEngineView *>(mainTab->currentWidget())->forward();
+
+}

@@ -27,6 +27,8 @@ public:
     void setDictList(QString key, QString value);
 public slots:
     void on_actionBack_triggered();
+
+    [[maybe_unused]] void on_actionForward_griggered();
     void on_actionsearch_triggered();
     void on_actionedit_dict_triggered();
 
