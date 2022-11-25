@@ -6,6 +6,7 @@
 #include <QSettings>
 #include <QtSql/QSqlDatabase>
 #include <iostream>
+#include <QCompleter>
 
 #include "editdict.h"
 
@@ -24,7 +25,10 @@ public:
     void readInitFile();
 
     void setDictList(QString key, QString value);
-private slots:
+public slots:
+    void on_actionBack_triggered();
+
+    [[maybe_unused]] void on_actionForward_griggered();
     void on_actionsearch_triggered();
     void on_actionedit_dict_triggered();
 
@@ -34,6 +38,8 @@ protected:
 private:
     Ui::MainWindow *ui;
     QLineEdit searchedit;
+    QStringList wordList;
+    QCompleter *completer;
     QHash<QString, QString> dictList;
     QTabWidget *mainTab;
     EditDict *edit_dict;

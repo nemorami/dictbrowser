@@ -20,7 +20,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>20</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>
@@ -36,6 +36,8 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionedit_dict"/>
+   <addaction name="actionBack"/>
+   <addaction name="actionForward"/>
    <addaction name="actionsearch"/>
   </widget>
   <action name="actionsearch">
@@ -49,6 +51,16 @@
    </property>
    <property name="toolTip">
     <string>사전편집</string>
+   </property>
+  </action>
+  <action name="actionBack">
+   <property name="text">
+    <string>Back</string>
+   </property>
+  </action>
+  <action name="actionForward">
+   <property name="text">
+    <string>Forward</string>
    </property>
   </action>
  </widget>
