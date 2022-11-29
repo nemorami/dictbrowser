@@ -36,6 +36,7 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionedit_dict"/>
+   <addaction name="actionsearchedList"/>
    <addaction name="actionBack"/>
    <addaction name="actionForward"/>
    <addaction name="actionsearch"/>
@@ -61,6 +62,11 @@
   <action name="actionForward">
    <property name="text">
     <string>Forward</string>
+   </property>
+  </action>
+  <action name="actionsearchedList">
+   <property name="text">
+    <string>searchedList</string>
    </property>
   </action>
  </widget>

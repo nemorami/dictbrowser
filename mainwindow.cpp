@@ -29,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
     readDataFile();
 
     edit_dict = new EditDict();
+    searched_list = new SearchedList();
 
 }
 
@@ -43,6 +44,7 @@ void MainWindow::readDataFile()
     //database connection
     db = QSqlDatabase::addDatabase("QSQLITE");
     QString data_dir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    qDebug() << data_dir;
     // 데이터 디렉토리가 없으면  생성
     if (!QDir(data_dir).exists())
         QDir().mkdir(data_dir);
@@ -80,6 +82,15 @@ void MainWindow::readDataFile()
     while(query.next()){
         setDictList(query.value(0).toString(), query.value(1).toString());
     }
+
+    // searched_list 테이블 생성..
+    query.prepare("select count(*) from sqlite_master where name = 'searched_list'");
+    query.exec();
+    // create table if it doesn't exist
+    if(query.next()) {
+        query.prepare("create table searched_list(word text, date varchar(14))");
+        query.exec();
+    }
 }
 
 
@@ -103,6 +114,14 @@ void MainWindow::on_actionsearch_triggered()
         qDebug() << "search: " << search << Qt::endl <<  "url:" << url << Qt::endl;
         qobject_cast<QWebEngineView *>(mainTab->currentWidget())->setUrl(QUrl(url));
         //view->setPage(new WebPage());
+        QSqlQuery query;
+        QString now = QDateTime::currentDateTime().toString("yyyyMMddhhmmss");
+        query.prepare("insert into searched_list values(:search, :now)");
+        query.bindValue(":search", search);
+        query.bindValue(":now", now);
+        query.exec();
+        qDebug() << query.executedQuery();
+        
     }
 }
 
@@ -130,5 +149,12 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 
 void MainWindow::on_actionForward_griggered() {
     dynamic_cast<QWebEngineView *>(mainTab->currentWidget())->forward();
+    
 
 }
+
+void MainWindow::on_actionsearchedList_triggered() {
+    searched_list->show();
+
+}
+

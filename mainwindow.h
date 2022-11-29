@@ -9,6 +9,7 @@
 #include <QCompleter>
 
 #include "editdict.h"
+#include "searchedlist.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -28,9 +29,10 @@ public:
 public slots:
     void on_actionBack_triggered();
 
-    [[maybe_unused]] void on_actionForward_griggered();
+    void on_actionForward_griggered();
     void on_actionsearch_triggered();
     void on_actionedit_dict_triggered();
+    void on_actionsearchedList_triggered();
 
 protected:
     void closeEvent(QCloseEvent *event) override;
@@ -43,6 +45,7 @@ private:
     QHash<QString, QString> dictList;
     QTabWidget *mainTab;
     EditDict *edit_dict;
+    SearchedList *searched_list;
     QSqlDatabase db;
 
 };

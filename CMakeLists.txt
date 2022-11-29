@@ -50,7 +50,9 @@ else()
     webpage.cpp
     webpage.h
     editdict.ui
-  )
+    searchedlist.cpp
+    searchedlist.h
+    searchedlist.ui)
 endif()
 
 target_link_libraries(dictbrowser  PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt6::WebEngineWidgets Qt6::Sql)
