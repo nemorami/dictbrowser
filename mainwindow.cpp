@@ -114,13 +114,22 @@ void MainWindow::on_actionsearch_triggered()
         qDebug() << "search: " << search << Qt::endl <<  "url:" << url << Qt::endl;
         qobject_cast<QWebEngineView *>(mainTab->currentWidget())->setUrl(QUrl(url));
         //view->setPage(new WebPage());
+
+        // insert word in searched list
+        // issue: #4
         QSqlQuery query;
-        QString now = QDateTime::currentDateTime().toString("yyyyMMddhhmmss");
-        query.prepare("insert into searched_list values(:search, :now)");
+        QString now = QDateTime::currentDateTime().toString("yyyyMMdd");
+        query.prepare("select * from searched_list where word = :search and date = :now");
         query.bindValue(":search", search);
         query.bindValue(":now", now);
-        query.exec();
-        qDebug() << query.executedQuery();
+
+        if (!query.next()) {
+            query.prepare("insert into searched_list values(:search, :now)");
+            query.bindValue(":search", search);
+            query.bindValue(":now", now);
+            query.exec();
+            qDebug() << query.executedQuery();
+        }
         
     }
 }
