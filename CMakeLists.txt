@@ -25,7 +25,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #endif()
 
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets WebEngineWidgets Sql REQUIRED)
+find_package(Qt6 COMPONENTS Widgets WebEngineWidgets Sql REQUIRED)
 
 if(ANDROID)
   add_library(dictbrowser SHARED
@@ -55,4 +55,4 @@ else()
     searchedlist.ui)
 endif()
 
-target_link_libraries(dictbrowser  PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt6::WebEngineWidgets Qt6::Sql)
+target_link_libraries(dictbrowser  PRIVATE Qt6::Widgets Qt6::WebEngineWidgets Qt6::Sql)
