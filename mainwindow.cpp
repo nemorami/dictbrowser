@@ -43,6 +43,7 @@ void MainWindow::readDataFile()
 {
     //database connection
     db = QSqlDatabase::addDatabase("QSQLITE");
+    // .local/share/dictbrowser
     QString data_dir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     qDebug() << data_dir;
     // 데이터 디렉토리가 없으면  생성

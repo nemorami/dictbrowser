@@ -6,7 +6,8 @@
 #define DICTBROWSER_SEARCHEDLIST_H
 
 #include <QWidget>
-
+#include <QAbstractButton>
+#include <QSqlTableModel>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class SearchedList; }
@@ -20,8 +21,12 @@ public:
 
     ~SearchedList() override;
 
+private slots:
+    void on_buttonBox_clicked(QAbstractButton *button);
+
 private:
     Ui::SearchedList *ui;
+    QSqlTableModel model;
 };
 
 
