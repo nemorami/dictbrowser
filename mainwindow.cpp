@@ -123,6 +123,7 @@ void MainWindow::on_actionsearch_triggered()
         query.prepare("select * from searched_list where word = :search and date = :now");
         query.bindValue(":search", search);
         query.bindValue(":now", now);
+        query.exec();
 
         if (!query.next()) {
             query.prepare("insert into searched_list values(:search, :now)");
