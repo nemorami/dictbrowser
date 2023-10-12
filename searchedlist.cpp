@@ -4,6 +4,7 @@
 
 // You may need to build the project (run Qt uic code generator) to get "ui_SearchedList.h" resolved
 
+#include <QMenu>
 #include "searchedlist.h"
 #include "ui_searchedlist.h"
 
@@ -15,7 +16,9 @@ SearchedList::SearchedList(QWidget *parent) :
 
     model.setTable("searched_list");
     model.select();
-
+    //Check 오른쪽 버튼 눌렀을때 커스텀 메뉴...
+    ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->tableView, &QTableView::customContextMenuRequested, this, &SearchedList::customMenuRequested);
     ui->tableView->setModel(&model);
 }
 
@@ -33,5 +36,14 @@ void SearchedList::on_buttonBox_clicked(QAbstractButton *button) {
         default:
             break;
     }
+
+}
+
+void SearchedList::customMenuRequested(QPoint pos) {
+    QModelIndex index = ui->tableView->indexAt(pos);
+
+    QMenu *menu = new QMenu(this);
+    menu->addAction(new QAction("&Delete", this));
+    menu->popup(ui->tableView->viewport()->mapToGlobal(pos));
 
 }
