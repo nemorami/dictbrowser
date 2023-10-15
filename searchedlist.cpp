@@ -43,7 +43,16 @@ void SearchedList::customMenuRequested(QPoint pos) {
     QModelIndex index = ui->tableView->indexAt(pos);
 
     QMenu *menu = new QMenu(this);
-    menu->addAction(new QAction("&Delete", this));
+    QAction *deleteAction = new QAction("&Delete", this);
+    menu->addAction(deleteAction);
+    connect(deleteAction, &QAction::triggered, this, &SearchedList::deleteWord);
     menu->popup(ui->tableView->viewport()->mapToGlobal(pos));
 
+}
+
+void SearchedList::deleteWord() {
+    // fixme row 전체가 선택되지 안음.. 행 전체를 선택하고 지우면 지워지기는 하는데... 좀 이상함.
+    for(auto row : ui->tableView->selectionModel()->selectedRows())
+        model.removeRow(row.row());
+    model.submit();
 }

@@ -24,6 +24,7 @@ public:
 private slots:
     void on_buttonBox_clicked(QAbstractButton *button);
     void customMenuRequested(QPoint pos);
+    void deleteWord();
 
 private:
     Ui::SearchedList *ui;
