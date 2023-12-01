@@ -8,7 +8,7 @@
 #include <QtSql/QSqlQuery>
 #include <QDir>
 
-
+/*clion*/
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
