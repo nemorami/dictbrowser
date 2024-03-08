@@ -82,6 +82,7 @@ void MainWindow::readDataFile()
 
     while(query.next()){
         setDictList(query.value(0).toString(), query.value(1).toString());
+        qDebug() << query.value(0).toString() << query.value(1).toString();
     }
 
     // searched_list 테이블 생성..
@@ -98,9 +99,11 @@ void MainWindow::readDataFile()
 void MainWindow::setDictList(QString key, QString value)
 {
     dictList[key] = value;
+    qDebug() << "key: " << key << Qt::endl;
     QWebEngineView *view = new QWebEngineView(this);
     view->setPage(new WebPage());
     mainTab->addTab(view, key);
+
 }
 
 void MainWindow::on_actionsearch_triggered()
@@ -108,8 +111,9 @@ void MainWindow::on_actionsearch_triggered()
     QString search = searchedit.text();
     if (!search.isEmpty()) {
         int index = mainTab->currentIndex();
-
-        QString url = dictList[mainTab->tabText(index)];
+        qDebug() << "index: " << index << Qt::endl;
+        // fixme: 탭 라벨에 &가 추가되어 있음 왜?
+        QString url = dictList[(mainTab->tabText(index)).remove("&")];
 
         url.replace("QUERY", search);
         qDebug() << "search: " << search << Qt::endl <<  "url:" << url << Qt::endl;

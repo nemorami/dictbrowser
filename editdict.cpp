@@ -25,7 +25,7 @@ EditDict::EditDict(QWidget *parent) :
     connect(ui->tableView, &QTableView::customContextMenuRequested, this, &EditDict::customMenuRequested);
     // row순서가 변경되면 orderChanged를 true로 설정
     orderChanged = false;
-    connect(ui->tableView->verticalHeader(), &QHeaderView::sectionMoved, [=](){orderChanged = true;});
+    connect(ui->tableView->verticalHeader(), &QHeaderView::sectionMoved, [=, this](){orderChanged = true;});
 //    model.setHeaderData(0, Qt::Horizontal, "이름");
 //    model.setHeaderData(1, Qt::Horizontal, "URL");
 
